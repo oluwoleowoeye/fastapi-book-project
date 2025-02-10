@@ -17,10 +17,7 @@ app.add_middleware(
 
 app.include_router(api_router, prefix=settings.API_PREFIX)
 
-@app.get("/")
-async def root():
-    """Root endpoint to check if the API is running."""
-    return {"message": "FastAPI is running!"}
+
 
 @app.get("/healthcheck")
 async def health_check():
