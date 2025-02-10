@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main  # ✅ Run "test" job on PRs to `main`
+  push:
+    branches:
+      - main  # ✅ Run "deploy" job when PR is merged into `main`
+
+jobs:
+  test:  # ✅ Runs on PRs to `main`
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        run: poetry run pytest -v  # ✅ Workflow succeeds if all tests pass
+
+  deploy:  # ✅ Runs when PR is merged to `main`
+    runs-on: ubuntu-latest
+    needs: test  # ✅ Ensures "test" passes before deploying
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy Application
+        run: echo "��� Deploying the application..."
+
