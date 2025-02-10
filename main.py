@@ -24,23 +24,26 @@ async def health_check():
     return {"status": "active"}
 
 
-# Define a Pydantic model for Book response
+# Define a Pydantic model for the Book response
 class Book(BaseModel):
     book_id: int
     title: str
     author: str
 
 
+# Sample book data
+BOOKS_DB = {
+    1: {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald"},
+    2: {"title": "1984", "author": "George Orwell"},
+    3: {"title": "To Kill a Mockingbird", "author": "Harper Lee"},
+}
+
+
 @app.get("/api/v1/books/{book_id}", response_model=Book)
 async def get_book(book_id: int):
     """Fetch a book by its ID and return as JSON. Returns 404 if book is not found."""
-    sample_books = {
-        1: {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald"},
-        2: {"title": "1984", "author": "George Orwell"},
-        3: {"title": "To Kill a Mockingbird", "author": "Harper Lee"},
-    }
-
-    if book_id not in sample_books:
-        raise HTTPException(status_code=404, detail="Book not found")  # ✅ Returns 404
-
-    return {"book_id": book_id, **sample_books[book_id]}
+    book = BOOKS_DB.get(book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    
+    return {"book_id": book_id, **book}  # ✅ Corrected response format
