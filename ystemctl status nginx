@@ -1,0 +1,18 @@
+● nginx.service - The nginx HTTP and reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: disabled)
+     Active: active (running) since Mon 2025-02-10 23:50:54 UTC; 30min ago
+    Process: 43360 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+    Process: 43372 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+    Process: 43393 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+   Main PID: 43404 (nginx)
+      Tasks: 2 (limit: 1111)
+     Memory: 3.5M
+        CPU: 80ms
+     CGroup: /system.slice/nginx.service
+             ├─43404 "nginx: master process /usr/sbin/nginx"
+             └─43405 "nginx: worker process"
+
+Feb 10 23:50:54 ip-172-31-27-148.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+Feb 10 23:50:54 ip-172-31-27-148.ec2.internal nginx[43372]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Feb 10 23:50:54 ip-172-31-27-148.ec2.internal nginx[43372]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Feb 10 23:50:54 ip-172-31-27-148.ec2.internal systemd[1]: Started nginx.service - The nginx HTTP and reverse proxy server.
